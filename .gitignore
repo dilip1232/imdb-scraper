@@ -1,0 +1,64 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# Environment
+.env
+*.env
+.env.*
+venv/
+.venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Migrations
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/*.py[cod]
+*/migrations/*.db
+*/migrations/*.sqlite3
+
+# Playwright
+playwright/.cache/
+playwright-report/
+
+# Coverage
+coverage.xml
+*.cover
+.cache
+nosetests.xml
+*.log
+
+# Others
+*.sqlite3
+scraper/__pycache__/
