@@ -1,7 +1,6 @@
-
 # 🎬 IMDb Scraper Project (Django + Admin + API)
 
-This Django project allows you to scrape movie data from IMDb based on `genre` or `keyword`, and manage everything via the Django admin interface.
+This Django project allows you to scrape movie data from IMDb based on `genre` or `keyword`, and manage everything via the Django Admin interface or REST API.
 
 ---
 
@@ -20,7 +19,11 @@ cd imdb-scraper
 pip install -r requirements.txt
 ```
 
-> Make sure you have Python 3.9+ and `playwright` dependencies set up correctly.
+> Ensure you have Python 3.9+ installed. Playwright setup is required for scraping:
+>
+```bash
+playwright install
+```
 
 ### 3. 🧱 Set Up the Database
 
@@ -49,48 +52,52 @@ python manage.py runserver
 
 ---
 
-## 🛠 Starting a Scraper Job (via Admin Panel)
+## 🛠 Start a Scraper Job (via Admin Panel)
 
 You can trigger and monitor scrapers directly from Django Admin:
 
 1. Go to [http://localhost:8000/admin/](http://localhost:8000/admin/)
 2. Navigate to **"Scrape Jobs"**
 3. Click **"Add New Scrape Job"**
-4. Select `search_type`, provide `search_value` (e.g. "action" or "sci-fi"), and a `limit`
-5. Hit **Save** — the scraper runs in the background, and status will update automatically
+4. Set `search_type`, `search_value` (e.g. "action", "thriller"), and a `limit`
+5. Hit **Save** — the scraper runs automatically, status will update
 
-### 🖼️ Admin Screenshot
+### 🖼️ Admin Scraper Control Panel
 
-> _(Replace this with actual screenshot)_
-
-```
-📷 ![Admin Scraper Panel](screenshots/admin-scraper-job.png)
-```
+![Scraper Admin Panel](screenshots/scraper.png)
 
 ---
 
-## 📡 API: Get Scraped Movies
+## 🎞️ Browse Scraped Movies
+
+From Django Admin, go to the **Movies** section to see all scraped results.
+
+![Movie List Admin](screenshots/movies.png)
+
+---
+
+## 📡 API: Access Scraped Movies
 
 ### 📥 Endpoint
 
 ```
-GET /api/movies/
+GET /scraper/movies/
 ```
 
 ### 🔎 Query Parameters
 
-| Param       | Type   | Description                         |
-|-------------|--------|-------------------------------------|
-| `search`    | string | Full-text search in title/cast/etc |
-| `year`      | int    | Filter by year                      |
-| `rating`    | float  | Filter by exact rating              |
-| `ordering`  | string | Field to order by (`-rating`, `year`) |
-| `per_page`  | int    | Number of results per page          |
+| Param       | Type   | Description                               |
+|-------------|--------|-------------------------------------------|
+| `search`    | string | Search in title, cast, plot, directors    |
+| `year`      | int    | Filter by release year                    |
+| `rating`    | float  | Filter by exact rating                    |
+| `ordering`  | string | Order by field (`-rating`, `year`, etc.) |
+| `per_page`  | int    | Items per page                            |
 
 ### 📤 Sample Request
 
 ```
-GET /api/movies/?search=action&year=2023&ordering=-rating&per_page=5
+GET /scraper/movies/?search=action&year=2023&ordering=-rating&per_page=5
 ```
 
 ### 📥 Sample Response
@@ -115,32 +122,19 @@ GET /api/movies/?search=action&year=2023&ordering=-rating&per_page=5
 
 ---
 
-## 💡 Future Improvements
-
-- ✅ **API-based scraper trigger endpoint**
-- ⏳ **Real-time admin scraper progress** (via polling or Django Channels)
-- 🎛 **More robust filtering**:
-  - Range filter: `rating__gte=6&rating__lte=9`
-  - Genre multi-select
-- 🧠 **Intelligent duplicate detection and merge logic**
-- ⏱ **Schedule recurring scrapes** (CRON or Celery Beat)
-- 🌐 **Web frontend dashboard** (React/Vue/HTMX)
-
----
-
 ## 📂 Project Structure
 
 ```bash
 scraper/
-│
-├── models.py         # Movie and ScraperStatus models
-├── admin.py          # Admin logic + scraper trigger
-├── views.py          # Admin panel views + API
-├── serializers.py    # Movie API serializer
-├── urls.py           # Route definitions
+├── models.py             # Movie and ScraperStatus models
+├── admin.py              # Admin panel + trigger logic
+├── views.py              # DRF API + admin integrations
+├── serializers.py        # Movie API serializer
+├── urls.py               # API and admin URLs
 ├── management/
 │   └── commands/
-│       └── scrapper.py   # Main scraping logic using Playwright
+│       └── scraper.py    # Core scraper logic using Playwright
+├── tests.py              # API + scraper unit tests
 ```
 
 ---
@@ -149,7 +143,21 @@ scraper/
 
 - Django + Django Admin
 - Django REST Framework
-- Playwright + BeautifulSoup
+- Playwright (async web scraping)
+- BeautifulSoup (HTML parsing)
 - PostgreSQL / SQLite
-- Async + Threaded scraping
-- DRF filters, pagination, ordering
+- DRF Filtering, Ordering, Pagination
+- Threading + Async
+
+---
+
+## 🚀 Future Improvements
+
+- 🔁 **API-based scraper trigger**
+- 📈 **Real-time admin scraper status** (WebSocket or polling)
+- 🎛️ **Advanced filtering**:
+  - Range support (e.g., `rating__gte=6`)
+  - Multi-field sorting
+- 🧠 **Intelligent deduplication + movie merging**
+- ⏰ **Scheduled scrapes** using Celery Beat
+- 🌍 **Frontend dashboard** (HTMX / React)
